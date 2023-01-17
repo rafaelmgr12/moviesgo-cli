@@ -4,9 +4,27 @@ import (
 	"testing"
 
 	"github.com/rafaelmgr12/moviego-cli/database"
+	"github.com/rafaelmgr12/moviego-cli/model"
 	"github.com/rafaelmgr12/moviego-cli/service"
 	"github.com/stretchr/testify/assert"
 )
+
+var IDTest string
+
+func MockMovie() {
+	database.Connect()
+	movie := model.Movie{ID: "1", Title: "Test", Genre: "Test"}
+	database.DB.Create(&movie)
+	IDTest = movie.ID
+
+}
+
+func DeleteMovieMock() {
+	var movie model.Movie
+	database.Connect()
+	database.DB.First(&movie)
+	database.DB.Delete(&movie, IDTest)
+}
 
 func TestExample(t *testing.T) {
 	assert.Equal(t, 1, 1, "Should be equal")
@@ -23,6 +41,10 @@ func TestDatabaseConnection(t *testing.T) {
 	assert.NotNil(t, database.DB, "Should be not nil")
 }
 
-func TestSaveMovieInDB(t *testing.T) {
-
+func TestDatabaseInsert(t *testing.T) {
+	MockMovie()
+	defer DeleteMovieMock()
+	var movie model.Movie
+	result := database.DB.First(&movie, IDTest)
+	assert.Equal(t, int(result.RowsAffected), 1, "Should return the one row with the test value")
 }
