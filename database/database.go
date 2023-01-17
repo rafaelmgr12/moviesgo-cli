@@ -1,6 +1,8 @@
 package database
 
 import (
+	"log"
+
 	"github.com/rafaelmgr12/moviego-cli/model"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -12,10 +14,10 @@ var (
 )
 
 func Connect() {
-	connectionString := "host=localhost user=root password=root dbname=moviesgo port=3306 sslmode=disable"
+	connectionString := "root:root@tcp(127.0.0.1:3306)/moviesgo?charset=utf8mb4&parseTime=True&loc=Local"
 	DB, err = gorm.Open(mysql.Open(connectionString), &gorm.Config{})
 	if err != nil {
-		panic("Failed to connect to database!")
+		log.Println(err)
 	}
 	DB.AutoMigrate(&model.Movie{})
 }
