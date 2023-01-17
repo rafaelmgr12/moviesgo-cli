@@ -6,7 +6,6 @@ import (
 )
 
 func SaveMovieInDB(movie model.Movie) {
-	database.Connect()
 	database.DB.Create(&movie)
 
 }
