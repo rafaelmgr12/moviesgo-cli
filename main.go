@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"sync"
 
 	"github.com/rafaelmgr12/moviego-cli/controller"
 	"github.com/rafaelmgr12/moviego-cli/database"
@@ -11,6 +12,7 @@ import (
 )
 
 var app = cli.NewApp()
+var wg sync.WaitGroup
 
 func info() {
 	app.Name = "Moviego CLI"
@@ -28,8 +30,10 @@ func commands() {
 				database.Connect()
 				movies := service.GetAllMoviesFromCSV("./input/movies.csv")
 				for _, movie := range movies {
-					controller.SaveMovieInDB(movie)
+					go controller.SaveMovieInDB(movie)
+					wg.Add(1)
 				}
+				wg.Wait()
 
 			},
 		},
