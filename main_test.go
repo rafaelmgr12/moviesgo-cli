@@ -9,11 +9,11 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var IDTest string
+var IDTest int
 
 func MockMovie() {
 	database.Connect()
-	movie := model.Movie{ID: "1", Title: "Test", Genre: "Test"}
+	movie := model.Movie{ID: 1, Title: "Test", Genre: "Test"}
 	database.DB.Create(&movie)
 	IDTest = movie.ID
 
