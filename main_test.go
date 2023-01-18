@@ -13,7 +13,7 @@ var IDTest int
 
 func MockMovie() {
 	database.Connect()
-	movie := model.Movie{ID: 1, Title: "Test", Genre: "Test"}
+	movie := model.Movie{ID: 1, Title: "Test", Genre: "Test", Year: 2021}
 	database.DB.Create(&movie)
 	IDTest = movie.ID
 
