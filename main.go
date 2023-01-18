@@ -24,7 +24,7 @@ func info() {
 func commands() {
 	app.Commands = []cli.Command{
 		{
-			Name:    "insert",
+			Name:    "insert data from csv",
 			Aliases: []string{"i"},
 			Usage:   "Add a movie to the database",
 			Action: func(c *cli.Context) {
