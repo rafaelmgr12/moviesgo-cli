@@ -2,6 +2,7 @@ package service
 
 import (
 	"strconv"
+	"strings"
 
 	"github.com/rafaelmgr12/moviego-cli/model"
 	"github.com/rafaelmgr12/moviego-cli/utils"
@@ -9,7 +10,6 @@ import (
 
 func GetAllMoviesFromCSV(filePath string) []model.Movie {
 	records := utils.ReadCSVFile(filePath)
-	nameExistMap := make(map[string]bool)
 
 	var movies []model.Movie
 	for _, record := range records[1:] {
@@ -17,16 +17,21 @@ func GetAllMoviesFromCSV(filePath string) []model.Movie {
 		if err != nil {
 			panic(err)
 		}
+		movieNameSplits := strings.Split(record[1], "(")
+		title := movieNameSplits[0]
+		year := strings.Split(record[1], "(")[len(movieNameSplits)-1]
+
+		yearInt, _ := strconv.Atoi(strings.Trim(year, ")"))
+
 		movie := model.Movie{
 			ID:    id,
-			Title: record[1],
+			Title: title,
 			Genre: record[2],
+			Year:  yearInt,
 		}
-		if _, ok := nameExistMap[movie.Title]; ok {
-			continue
-		} else {
-			movies = append(movies, movie)
-		}
+
+		movies = append(movies, movie)
+
 	}
 	return movies
 }
