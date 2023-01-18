@@ -8,8 +8,10 @@ import (
 )
 
 var mut sync.Mutex
+var wg sync.WaitGroup
 
 func SaveMovieInDB(movie model.Movie) {
+
 	mut.Lock()
 	defer mut.Unlock()
 	database.DB.Create(&movie)

@@ -27,6 +27,7 @@ func commands() {
 			Aliases: []string{"i"},
 			Usage:   "Add a movie to the database",
 			Action: func(c *cli.Context) {
+				defer wg.Done()
 				database.Connect()
 				movies := service.GetAllMoviesFromCSV("./input/movies.csv")
 				for _, movie := range movies {
