@@ -5,14 +5,15 @@ import (
 	"os"
 	"sync"
 
-	"github.com/rafaelmgr12/moviego-cli/controller"
 	"github.com/rafaelmgr12/moviego-cli/database"
+	"github.com/rafaelmgr12/moviego-cli/model"
 	"github.com/rafaelmgr12/moviego-cli/service"
 	"github.com/urfave/cli"
 )
 
 var app = cli.NewApp()
 var wg sync.WaitGroup
+var mut sync.Mutex
 
 func info() {
 	app.Name = "Moviego CLI"
@@ -27,11 +28,11 @@ func commands() {
 			Aliases: []string{"i"},
 			Usage:   "Add a movie to the database",
 			Action: func(c *cli.Context) {
-				defer wg.Done()
+
 				database.Connect()
 				movies := service.GetAllMoviesFromCSV("./input/movies.csv")
 				for _, movie := range movies {
-					go controller.SaveMovieInDB(movie)
+					go saveMovieInDB(movie)
 					wg.Add(1)
 				}
 				wg.Wait()
@@ -39,6 +40,14 @@ func commands() {
 			},
 		},
 	}
+}
+
+func saveMovieInDB(movie model.Movie) {
+	defer wg.Done()
+	mut.Lock()
+	defer mut.Unlock()
+	database.DB.Create(&movie)
+
 }
 
 func main() {
