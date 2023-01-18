@@ -4,7 +4,7 @@ import (
 	"log"
 
 	"github.com/rafaelmgr12/moviego-cli/model"
-	"gorm.io/driver/mysql"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
@@ -14,8 +14,8 @@ var (
 )
 
 func Connect() {
-	connectionString := "root:root@tcp(127.0.0.1:3306)/moviesgo?charset=utf8mb4&parseTime=True&loc=Local"
-	DB, err = gorm.Open(mysql.Open(connectionString), &gorm.Config{})
+	connectionString := "host=localhost user=rafael password=secret dbname=moviesgo port=5432 sslmode=disable TimeZone=Asia/Shanghai"
+	DB, err = gorm.Open(postgres.Open(connectionString), &gorm.Config{})
 	if err != nil {
 		log.Println(err)
 	}
